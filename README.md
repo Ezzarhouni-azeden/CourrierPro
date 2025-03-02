@@ -1,4 +1,5 @@
-# CourrierService
+# CourrierPro
+
 This repository contains the backend for a CourrierPro application, designed using a RESTful API architecture. The  web client will interact with the API endpoints.
 
 Technologies Used
@@ -31,4 +32,3 @@ Clone this repository to your local machine.
 Set up the environment variables (JAVA_HOME, MAVEN_HOME).
 Build the project using Maven.
 mvn clean install
-# CourrierPro
