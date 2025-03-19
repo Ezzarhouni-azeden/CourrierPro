@@ -1,49 +1,25 @@
 package com.courrierpro.services;
 
-import com.courrierpro.entities.Courrier;
-import com.courrierpro.repositories.CourrierRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import com.courrierpro.entitiesDTO.CourrierDTO;
+import com.courrierpro.entitiesDTO.PieceJointeDTO;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
-@Service
-public class CourrierService {
+public interface CourrierService {
+    List<CourrierDTO> getAllCourriers();
+    Optional<CourrierDTO> getCourrierById(Long id);
+    CourrierDTO createCourrier(CourrierDTO courrierDTO);
+    CourrierDTO updateCourrier(Long id, CourrierDTO courrierDetails);
+    void deleteCourrier(Long id);
+    CourrierDTO affecterCourrier(Long id, Long userId);
+    CourrierDTO validerCourrier(Long id);
+    CourrierDTO rejeterCourrier(Long id);
+    // Gestion des pièces jointes
+    PieceJointeDTO ajouterPieceJointe(Long courrierId, MultipartFile fichier) throws IOException;
+    byte[] telechargerPieceJointe(Long id);
 
-    @Autowired
-    private CourrierRepository courrierRepository;
-
-    // Ajouter un courrier
-    public Courrier ajouterCourrier(Courrier courrier) {
-        return courrierRepository.save(courrier);
-    }
-
-    // Obtenir tous les courriers
-    public List<Courrier> obtenirTousLesCourriers() {
-        return courrierRepository.findAll();
-    }
-
-    // Obtenir un courrier par ID
-    public Optional<Courrier> obtenirCourrierParId(Long id) {
-        return courrierRepository.findById(id);
-    }
-
-    // Mettre à jour un courrier
-    public Courrier mettreAJourCourrier(Long id, Courrier detailsCourrier) {
-        return courrierRepository.findById(id).map(courrier -> {
-            courrier.setReference(detailsCourrier.getReference());
-            courrier.setExpediteur(detailsCourrier.getExpediteur());
-            courrier.setDestinataire(detailsCourrier.getDestinataire());
-            courrier.setDateEnvoi(detailsCourrier.getDateEnvoi());
-            courrier.setStatut(detailsCourrier.getStatut());
-            courrier.setDescription(detailsCourrier.getDescription());
-            return courrierRepository.save(courrier);
-        }).orElseThrow(() -> new RuntimeException("Courrier non trouvé"));
-    }
-
-    // Supprimer un courrier
-    public void supprimerCourrier(Long id) {
-        courrierRepository.deleteById(id);
-    }
 }

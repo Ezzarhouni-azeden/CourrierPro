@@ -12,8 +12,8 @@ public class SwaggerConfig {
     public OpenAPI customOpenAPI() {
         return new OpenAPI()
                 .info(new Info()
-                        .title("API CourrierPro")
+                        .title("API Spring Boot avec Swagger")
                         .version("1.0")
-                        .description("Documentation API CourrierPro"));
+                        .description("Documentation de l'API avec Swagger"));
     }
 }
