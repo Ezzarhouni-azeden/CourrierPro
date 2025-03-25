@@ -7,14 +7,10 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-@Builder
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 @Entity
 @Table(name = "users")
 public class User implements UserDetails {
@@ -25,13 +21,10 @@ public class User implements UserDetails {
     private String firstname;
     private String lastname;
     private String email;
-    @Getter
     @JsonIgnore // Exclut le mot de passe dans les réponses JSON
     private String password;
     @Enumerated(EnumType.STRING)
     private Role role;
-
-
 
 
     @Override
