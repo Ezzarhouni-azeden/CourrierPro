@@ -7,10 +7,8 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class PieceJointeDTO {
-    private Long id;
-    private String nomFichier;
-    private String url;
-    private byte[] contenu;
-    private Long courrierId;
+public class CourrierArriveeDTO extends CourrierDTO {
+    private String dateArrivee;
+    private String dateLimiteSortie;
+    private String statut;
 }

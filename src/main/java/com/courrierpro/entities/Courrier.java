@@ -3,7 +3,6 @@ package com.courrierpro.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDate;
 import java.util.List;
 @Getter
 @Setter
@@ -28,7 +27,9 @@ public class Courrier {
     private User charge;
 
     @ManyToOne
+    @JoinColumn(name = "dossier_id")
     private Dossier dossier;
+
 
     @OneToMany(mappedBy = "courrier", cascade = CascadeType.ALL)
     private List<PieceJointe> piecesJointes;

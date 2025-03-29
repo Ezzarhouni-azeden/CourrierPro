@@ -13,8 +13,8 @@ public class PieceJointe {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String nomFichier;
+    private String url;
 
     @Lob  // Stocker en base de données en tant que large object (LOB)
     private byte[] contenu;

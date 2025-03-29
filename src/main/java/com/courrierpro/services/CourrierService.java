@@ -1,7 +1,6 @@
 package com.courrierpro.services;
 
-import com.courrierpro.entitiesDTO.CourrierDTO;
-import com.courrierpro.entitiesDTO.PieceJointeDTO;
+import com.courrierpro.entitiesDTO.*;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -10,11 +9,34 @@ import java.util.List;
 import java.util.Optional;
 
 public interface CourrierService {
-    List<CourrierDTO> getAllCourriers();
-    Optional<CourrierDTO> getCourrierById(Long id);
-    CourrierDTO createCourrier(CourrierDTO courrierDTO);
-    CourrierDTO updateCourrier(Long id, CourrierDTO courrierDetails);
-    void deleteCourrier(Long id);
+
+    // Courrier Arrivée
+    CourrierArriveeDTO createCourrierArrivee(CourrierArriveeDTO courrierArriveeDTO);
+    CourrierArriveeDTO updateCourrierArrivee(Long id, CourrierArriveeDTO courrierArriveeDTO);
+    List<CourrierArriveeDTO> getAllCourrierArrivee();
+    CourrierArriveeDTO getCourrierArriveeById(Long id);
+    void deleteCourrierArrivee(Long id);
+
+    // Courrier Départ
+    CourrierDepartDTO createCourrierDepart(CourrierDepartDTO courrierDepartDTO);
+    CourrierDepartDTO updateCourrierDepart(Long id, CourrierDepartDTO courrierDepartDTO);
+    List<CourrierDepartDTO> getAllCourrierDepart();
+    CourrierDepartDTO getCourrierDepartById(Long id);
+    void deleteCourrierDepart(Long id);
+
+    // Courrier Réponse
+    CourrierReponseDTO createCourrierReponse(CourrierReponseDTO courrierReponseDTO);
+    CourrierReponseDTO updateCourrierReponse(Long id, CourrierReponseDTO courrierReponseDTO);
+    List<CourrierReponseDTO> getAllCourrierReponse();
+    CourrierReponseDTO getCourrierReponseById(Long id);
+    void deleteCourrierReponse(Long id);
+
+
+    //List<CourrierDTO> getAllCourriers();
+    //Optional<CourrierDTO> getCourrierById(Long id);
+    //CourrierDTO createCourrier(CourrierDTO courrierDTO);
+    //CourrierDTO updateCourrier(Long id, CourrierDTO courrierDetails);
+    //void deleteCourrier(Long id);
     CourrierDTO affecterCourrier(Long id, Long userId);
     CourrierDTO validerCourrier(Long id);
     CourrierDTO rejeterCourrier(Long id);

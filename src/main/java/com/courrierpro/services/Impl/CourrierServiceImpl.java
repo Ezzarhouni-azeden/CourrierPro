@@ -1,16 +1,12 @@
 package com.courrierpro.services.Impl;
 
-import com.courrierpro.entities.Courrier;
-import com.courrierpro.entities.PieceJointe;
-import com.courrierpro.entities.Role;
-import com.courrierpro.entities.User;
-import com.courrierpro.entitiesDTO.CourrierDTO;
-import com.courrierpro.entitiesDTO.PieceJointeDTO;
+import com.courrierpro.entities.*;
+import com.courrierpro.entitiesDTO.*;
 import com.courrierpro.repositories.CourrierRepository;
 import com.courrierpro.repositories.PieceJointeRepository;
 import com.courrierpro.repositories.UserRepository;
 import com.courrierpro.services.CourrierService;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,74 +14,115 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 public class CourrierServiceImpl implements CourrierService {
 
-    @Autowired
-    private CourrierRepository courrierRepository;
+    private final CourrierRepository courrierRepository;
+    private final UserRepository userRepository;
+    private final PieceJointeRepository pieceJointeRepository;
 
-    @Autowired
-    private UserRepository userRepository;
+    public CourrierServiceImpl(CourrierRepository courrierRepository, UserRepository userRepository, PieceJointeRepository pieceJointeRepository) {
+        this.courrierRepository = courrierRepository;
+        this.userRepository = userRepository;
+        this.pieceJointeRepository = pieceJointeRepository;
+    }
 
-    @Autowired
-    private PieceJointeRepository pieceJointeRepository;
-
+    // MÉTHODES POUR COURRIER ARRIVÉE
     @Override
-    public List<CourrierDTO> getAllCourriers() {
-        return courrierRepository.findAll().stream()
-                .map(this::convertToDTO)
-                .collect(Collectors.toList());
+    public CourrierArriveeDTO createCourrierArrivee(CourrierArriveeDTO courrierArriveeDTO) {
+        return courrierArriveeDTO; // Implémentation manquante
     }
 
     @Override
-    public Optional<CourrierDTO> getCourrierById(Long id) {
-        return courrierRepository.findById(id).map(this::convertToDTO);
+    public CourrierArriveeDTO updateCourrierArrivee(Long id, CourrierArriveeDTO courrierArriveeDTO) {
+        courrierArriveeDTO.setIdCourrier(id);
+        return courrierArriveeDTO;
     }
 
     @Override
-    @Transactional
-    public CourrierDTO createCourrier(CourrierDTO courrierDTO) {
-        Courrier courrier = new Courrier();
-        courrier.setExpediteur(courrierDTO.getExpediteur());
-        courrier.setDestination(courrierDTO.getDestination());
-        courrier.setObjet(courrierDTO.getObjet());
-        courrier.setCharge(null);
-        courrier.setValide(false);
-        return convertToDTO(courrierRepository.save(courrier));
+    public List<CourrierArriveeDTO> getAllCourrierArrivee() {
+        return List.of(); // Retourne une liste vide pour éviter NullPointerException
     }
 
     @Override
-    @Transactional
-    public CourrierDTO updateCourrier(Long id, CourrierDTO courrierDetails) {
-        return courrierRepository.findById(id).map(courrier -> {
-            courrier.setExpediteur(courrierDetails.getExpediteur());
-            courrier.setDestination(courrierDetails.getDestination());
-            courrier.setObjet(courrierDetails.getObjet());
-            return convertToDTO(courrierRepository.save(courrier));
-        }).orElseThrow(() -> new RuntimeException("Courrier non trouvé"));
+    public CourrierArriveeDTO getCourrierArriveeById(Long id) {
+        return null; // Implémentation manquante
     }
 
     @Override
-    @Transactional
-    public void deleteCourrier(Long id) {
+    public void deleteCourrierArrivee(Long id) {
         courrierRepository.deleteById(id);
     }
 
+    // MÉTHODES POUR COURRIER DÉPART
+    @Override
+    public CourrierDepartDTO createCourrierDepart(CourrierDepartDTO courrierDepartDTO) {
+        return courrierDepartDTO;
+    }
+
+    @Override
+    public CourrierDepartDTO updateCourrierDepart(Long id, CourrierDepartDTO courrierDepartDTO) {
+        courrierDepartDTO.setIdCourrier(id);
+        return courrierDepartDTO;
+    }
+
+    @Override
+    public List<CourrierDepartDTO> getAllCourrierDepart() {
+        return List.of();
+    }
+
+    @Override
+    public CourrierDepartDTO getCourrierDepartById(Long id) {
+        return null;
+    }
+
+    @Override
+    public void deleteCourrierDepart(Long id) {
+        courrierRepository.deleteById(id);
+    }
+
+    // MÉTHODES POUR COURRIER RÉPONSE
+    @Override
+    public CourrierReponseDTO createCourrierReponse(CourrierReponseDTO courrierReponseDTO) {
+        return courrierReponseDTO;
+    }
+
+    @Override
+    public CourrierReponseDTO updateCourrierReponse(Long id, CourrierReponseDTO courrierReponseDTO) {
+        courrierReponseDTO.setIdCourrier(id);
+        return courrierReponseDTO;
+    }
+
+    @Override
+    public List<CourrierReponseDTO> getAllCourrierReponse() {
+        return List.of();
+    }
+
+    @Override
+    public CourrierReponseDTO getCourrierReponseById(Long id) {
+        return null;
+    }
+
+    @Override
+    public void deleteCourrierReponse(Long id) {
+        courrierRepository.deleteById(id);
+    }
+
+    // AFFECTATION & VALIDATION DES COURRIERS
     @Override
     @PreAuthorize("hasAuthority('CHEF_SERVICE')")
     @Transactional
     public CourrierDTO affecterCourrier(Long idCourrier, Long idUser) {
         Courrier courrier = courrierRepository.findById(idCourrier)
-                .orElseThrow(() -> new RuntimeException("Courrier non trouvé"));
+                .orElseThrow(() -> new EntityNotFoundException("Courrier non trouvé"));
 
-        User user = userRepository.findById(Math.toIntExact(idUser))
-                .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
+        User user = userRepository.findById(idUser.intValue())
+                .orElseThrow(() -> new EntityNotFoundException("Utilisateur non trouvé"));
 
         if (!user.getRole().equals(Role.CHARGE)) {
-            throw new RuntimeException("L'utilisateur n'a pas le rôle CHARGE !");
+            throw new IllegalArgumentException("L'utilisateur n'a pas le rôle CHARGE !");
         }
 
         courrier.setCharge(user);
@@ -96,61 +133,70 @@ public class CourrierServiceImpl implements CourrierService {
     @PreAuthorize("hasAuthority('CHEF_SERVICE')")
     @Transactional
     public CourrierDTO validerCourrier(Long id) {
-        return courrierRepository.findById(id).map(courrier -> {
-            if (courrier.getCharge() == null) {
-                throw new RuntimeException("Le courrier doit être affecté avant validation");
-            }
-            courrier.setValide(true);
-            return convertToDTO(courrierRepository.save(courrier));
-        }).orElseThrow(() -> new RuntimeException("Courrier non trouvé"));
+        Courrier courrier = courrierRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Courrier non trouvé"));
+
+        if (courrier.getCharge() == null) {
+            throw new IllegalStateException("Le courrier doit être affecté avant validation");
+        }
+
+        courrier.setValide(true);
+        return convertToDTO(courrierRepository.save(courrier));
     }
 
     @Override
     @PreAuthorize("hasAuthority('CHEF_SERVICE')")
     @Transactional
     public CourrierDTO rejeterCourrier(Long id) {
-        return courrierRepository.findById(id).map(courrier -> {
-            courrier.setValide(false);
-            return convertToDTO(courrierRepository.save(courrier));
-        }).orElseThrow(() -> new RuntimeException("Courrier non trouvé"));
+        Courrier courrier = courrierRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Courrier non trouvé"));
+
+        courrier.setValide(false);
+        return convertToDTO(courrierRepository.save(courrier));
     }
 
-    private CourrierDTO convertToDTO(Courrier courrier) {
-        return new CourrierDTO(
-                courrier.getIdCourrier(),
-                courrier.getExpediteur(),
-                courrier.getDestination(),
-                courrier.getObjet(),
-                courrier.getCharge() != null ?
-                        courrier.getCharge().getFirstname() + " " + courrier.getCharge().getLastname()
-                        : null
-        );
-    }
-
-    /**
-     * Ajoute une pièce jointe à un courrier.
-     */
+    // GESTION DES PIÈCES JOINTES
     @Override
     public PieceJointeDTO ajouterPieceJointe(Long courrierId, MultipartFile fichier) throws IOException {
         Courrier courrier = courrierRepository.findById(courrierId)
-                .orElseThrow(() -> new RuntimeException("Courrier non trouvé"));
+                .orElseThrow(() -> new EntityNotFoundException("Courrier non trouvé"));
 
         PieceJointe pieceJointe = new PieceJointe();
         pieceJointe.setNomFichier(fichier.getOriginalFilename());
         pieceJointe.setContenu(fichier.getBytes());
         pieceJointe.setCourrier(courrier);
 
-        pieceJointeRepository.save(pieceJointe);
+        pieceJointe = pieceJointeRepository.save(pieceJointe);
 
-        String fileUrl = "https://localhost:8443/api/courriers/piece-jointe/" + pieceJointe.getId();
-        return new PieceJointeDTO(pieceJointe.getId(), pieceJointe.getNomFichier(), fileUrl);
+        return new PieceJointeDTO(pieceJointe.getId(), pieceJointe.getNomFichier(),
+                "https://localhost:8443/api/courriers/piece-jointe/" + pieceJointe.getId(), null, pieceJointe.getCourrier().getIdCourrier());
     }
 
-    // Télécharger un fichier PDF
     @Override
     public byte[] telechargerPieceJointe(Long id) {
         PieceJointe pieceJointe = pieceJointeRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Pièce jointe non trouvée"));
+                .orElseThrow(() -> new EntityNotFoundException("Pièce jointe non trouvée"));
         return pieceJointe.getContenu();
+    }
+
+    // MÉTHODES UTILITAIRES POUR CONVERTIR EN DTO
+    private CourrierDTO convertToDTO(Courrier courrier) {
+        return new CourrierDTO(
+                courrier.getIdCourrier(),
+                courrier.getExpediteur(),
+                courrier.getDestination(),
+                courrier.getObjet(),
+                courrier.getDivers(),
+                courrier.isValide(),
+                courrier.getCharge() != null ? courrier.getCharge().getId().longValue() : null,
+                courrier.getDossier() != null ? courrier.getDossier().getIdDossier() : null,
+                courrier.getPiecesJointes().stream().map(this::convertPieceJointeToDTO).collect(Collectors.toList())
+        );
+    }
+
+    private PieceJointeDTO convertPieceJointeToDTO(PieceJointe pieceJointe) {
+        return new PieceJointeDTO(pieceJointe.getId(), pieceJointe.getNomFichier(),
+                "https://localhost:8443/api/courriers/piece-jointe/" + pieceJointe.getId(), null,
+                pieceJointe.getCourrier().getIdCourrier());
     }
 }

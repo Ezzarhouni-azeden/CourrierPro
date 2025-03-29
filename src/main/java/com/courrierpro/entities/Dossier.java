@@ -1,13 +1,11 @@
 package com.courrierpro.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 
-@Getter
-@Setter
+import java.util.List;
+
+
 @Entity
 @Data
 @NoArgsConstructor
@@ -18,4 +16,6 @@ public class Dossier {
     private Long idDossier;
     private String nomDossier;
     private String description;
+    @OneToMany(mappedBy = "dossier", cascade = CascadeType.ALL)
+    private List<Courrier> courriers;
 }

@@ -2,8 +2,9 @@ package com.courrierpro.entitiesDTO;
 
 import lombok.*;
 
-@Getter
-@Setter
+import java.util.List;
+
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -12,5 +13,9 @@ public class CourrierDTO {
     private String expediteur;
     private String destination;
     private String objet;
-    private String responsable;
+    private String divers;
+    private boolean valide;
+    private Long chargeId;
+    private Long dossierId;
+    private List<PieceJointeDTO> piecesJointes;
 }
