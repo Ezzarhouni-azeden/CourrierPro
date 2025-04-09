@@ -1,7 +1,9 @@
 package com.courrierpro.repositories;
 
 import com.courrierpro.entities.Reunion;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-public interface ReunionRepository extends CrudRepository<Reunion, Integer> {
+@Repository
+public interface ReunionRepository extends JpaRepository<Reunion, Long> {
 }
