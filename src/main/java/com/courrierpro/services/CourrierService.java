@@ -1,12 +1,11 @@
 package com.courrierpro.services;
 
+import com.courrierpro.entities.Statut;
 import com.courrierpro.entitiesDTO.*;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
 
 public interface CourrierService {
 
@@ -40,6 +39,10 @@ public interface CourrierService {
     CourrierDTO affecterCourrier(Long id, Long userId);
     CourrierDTO validerCourrier(Long id);
     CourrierDTO rejeterCourrier(Long id);
+    // Méthodes pour les courriers arrivés
+    CourrierDTO changerStatutCourrier(Long id, Statut nouveauStatut);
+
+
     // Gestion des pièces jointes
     PieceJointeDTO ajouterPieceJointe(Long courrierId, MultipartFile fichier) throws IOException;
     byte[] telechargerPieceJointe(Long id);

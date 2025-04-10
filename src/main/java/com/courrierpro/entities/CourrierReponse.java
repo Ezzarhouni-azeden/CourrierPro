@@ -8,7 +8,10 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@DiscriminatorValue("REPONSE")
 public class CourrierReponse extends CourrierDepart{
     private Long idCourrierArrivee;
+    private String dateReponse;
+
 }
 

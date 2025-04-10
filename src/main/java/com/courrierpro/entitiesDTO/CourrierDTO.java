@@ -18,4 +18,6 @@ public class CourrierDTO {
     private Long chargeId;
     private Long dossierId;
     private List<PieceJointeDTO> piecesJointes;
+
+
 }

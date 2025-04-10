@@ -1,5 +1,6 @@
 package com.courrierpro.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -17,5 +18,6 @@ public class Dossier {
     private String nomDossier;
     private String description;
     @OneToMany(mappedBy = "dossier", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Courrier> courriers;
 }

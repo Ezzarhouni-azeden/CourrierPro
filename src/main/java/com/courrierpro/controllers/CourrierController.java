@@ -1,5 +1,6 @@
 package com.courrierpro.controllers;
 
+import com.courrierpro.entities.Statut;
 import com.courrierpro.entitiesDTO.*;
 import com.courrierpro.services.CourrierService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -274,7 +275,63 @@ public class CourrierController {
         return ResponseEntity.noContent().build();
     }
 
+    /**
+     * Affecter un courrier à un utilisateur.
+     */
+    @Operation(summary = "Affecter un courrier", description = "Affecte un courrier à un utilisateur avec le rôle CHARGE.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Courrier affecté avec succès"),
+            @ApiResponse(responseCode = "404", description = "Courrier ou utilisateur non trouvé"),
+            @ApiResponse(responseCode = "400", description = "Utilisateur sans rôle CHARGE")
+    })
+    @PreAuthorize("hasAuthority('CHEF_SERVICE')")
+    @PutMapping("/{idCourrier}/affecter/{idUser}")
+    public ResponseEntity<CourrierDTO> affecterCourrier(@PathVariable Long idCourrier, @PathVariable Long idUser) {
+        return ResponseEntity.ok(courrierService.affecterCourrier(idCourrier, idUser));
+    }
 
+    /**
+     * Valider un courrier.
+     */
+    @Operation(summary = "Valider un courrier", description = "Valide un courrier déjà affecté à un CHARGE.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Courrier validé avec succès"),
+            @ApiResponse(responseCode = "404", description = "Courrier non trouvé"),
+            @ApiResponse(responseCode = "400", description = "Le courrier doit être affecté avant validation")
+    })
+    @PreAuthorize("hasAuthority('CHEF_SERVICE')")
+    @PutMapping("/{id}/valider")
+    public ResponseEntity<CourrierDTO> validerCourrier(@PathVariable Long id) {
+        return ResponseEntity.ok(courrierService.validerCourrier(id));
+    }
+
+    /**
+     * Rejeter un courrier.
+     */
+    @Operation(summary = "Rejeter un courrier", description = "Rejette un courrier et le marque comme invalide.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Courrier rejeté avec succès"),
+            @ApiResponse(responseCode = "404", description = "Courrier non trouvé")
+    })
+    @PreAuthorize("hasAuthority('CHEF_SERVICE')")
+    @PutMapping("/{id}/rejeter")
+    public ResponseEntity<CourrierDTO> rejeterCourrier(@PathVariable Long id) {
+        return ResponseEntity.ok(courrierService.rejeterCourrier(id));
+    }
+
+    @PutMapping("/{id}/statut")
+    @PreAuthorize("hasAuthority('CHEF_SERVICE')")
+    @Operation(
+            summary = "Changer le statut d'un courrier",
+            description = "Permet au CHEF_SERVICE de modifier le statut d'un courrier arrivé."
+    )
+    public ResponseEntity<CourrierDTO> changerStatutCourrier(
+            @PathVariable @Parameter(description = "ID du courrier à modifier", example = "1") Long id,
+            @RequestParam @Parameter(description = "Nouveau statut du courrier", example = "TRAITE") Statut statut) {
+
+        CourrierDTO courrierDTO = courrierService.changerStatutCourrier(id, statut);
+        return ResponseEntity.ok(courrierDTO);
+    }
 
     // 📌 Ajouter une pièce jointe à un courrier
     @PostMapping("/{courrierId}/piece-jointe")
@@ -283,6 +340,8 @@ public class CourrierController {
             @ApiResponse(responseCode = "200", description = "Pièce jointe ajoutée avec succès"),
             @ApiResponse(responseCode = "404", description = "Courrier non trouvé")
     })
+
+
 
     public ResponseEntity<PieceJointeDTO> ajouterPieceJointe(
             @PathVariable Long courrierId,

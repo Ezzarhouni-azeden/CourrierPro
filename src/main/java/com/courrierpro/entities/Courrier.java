@@ -10,6 +10,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Inheritance(strategy = InheritanceType.JOINED)  // Utilisation de JOINED pour l'héritage
 @Table(name ="courrier")
 public class Courrier {
 

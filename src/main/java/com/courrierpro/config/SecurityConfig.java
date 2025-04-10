@@ -52,7 +52,7 @@ public class SecurityConfig{
     public UrlBasedCorsConfigurationSource corsConfigurationSource() {  // ✅ Ajout de cette méthode !
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
-        config.setAllowedOrigins(List.of("https://localhost:3000")); // Autoriser le frontend React
+        config.setAllowedOrigins(List.of("https://localhost:3001")); // Autoriser le frontend React
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
         config.setExposedHeaders(List.of("Authorization"));
