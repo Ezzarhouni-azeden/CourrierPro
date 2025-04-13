@@ -46,7 +46,7 @@ public class ReunionController {
 
     @Operation(summary = "Lister toutes les réunions", description = "Retourne la liste de toutes les réunions")
     @ApiResponse(responseCode = "200", description = "Liste des réunions récupérée")
-    @GetMapping("/")
+    @GetMapping()
     public ResponseEntity<List<ReunionDTO>> obtenirToutesLesReunions() {
         return ResponseEntity.ok(reunionService.obtenirToutesLesReunions());
     }

@@ -48,9 +48,10 @@ private final AuthenticationService service;
                 new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
         );
         User user = (User) authentication.getPrincipal();
-        String token = jwtTokenProvider.generateToken(user);
+        String token = jwtTokenProvider.generateToken(user, Long.valueOf(user.getId()));
         AuthenticationResponse response = service.authenticate(request);
         return ResponseEntity.ok(Map.of( "token", token,
+                "userId", user.getId(),
                 "role", user.getRole().name())
         );
     }

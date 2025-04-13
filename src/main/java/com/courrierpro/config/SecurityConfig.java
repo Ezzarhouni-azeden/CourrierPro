@@ -36,6 +36,8 @@ public class SecurityConfig{
                         .requestMatchers("/api/auth/register", "/api/auth/authenticate").permitAll()
                         .requestMatchers("/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs/**", "/swagger-resources/**", "/webjars/**").permitAll()
                         .requestMatchers("/api/utilisateurs/**").hasAuthority("CHEF_SERVICE") // Autorise uniquement chef-service
+                        .requestMatchers("/api/reunions/**").permitAll() // Autorise l'accès aux endpoints de réunion
+
                         .requestMatchers("/test").permitAll()
 
                         .requestMatchers("/").permitAll()
@@ -52,7 +54,7 @@ public class SecurityConfig{
     public UrlBasedCorsConfigurationSource corsConfigurationSource() {  // ✅ Ajout de cette méthode !
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
-        config.setAllowedOrigins(List.of("https://localhost:3001")); // Autoriser le frontend React
+        config.setAllowedOrigins(List.of("https://localhost:3000")); // Autoriser le frontend React
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
         config.setExposedHeaders(List.of("Authorization"));

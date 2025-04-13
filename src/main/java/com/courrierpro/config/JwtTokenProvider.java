@@ -22,8 +22,9 @@ public class JwtTokenProvider {
     private long expiration;
 
     // Générer un jeton JWT
-    public String generateToken(UserDetails userDetails) {
+    public String generateToken(UserDetails userDetails, Long userId) {
         Map<String, Object> claims = new HashMap<>();
+        claims.put("userId", userId);
         return createToken(claims, userDetails.getUsername());
     }
 
@@ -40,7 +41,10 @@ public class JwtTokenProvider {
                 .signWith(SignatureAlgorithm.HS512, secret)
                 .compact();
     }
-
+    // Extraire l'ID utilisateur du jeton
+    public Long getUserIdFromToken(String token) {
+        return getClaimFromToken(token, claims -> claims.get("userId", Long.class));
+    }
     // Extraire le nom d'utilisateur du jeton
     public String getUsernameFromToken(String token) {
         return getClaimFromToken(token, Claims::getSubject);

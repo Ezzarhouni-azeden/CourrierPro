@@ -28,6 +28,6 @@ public class Reunion {
 
 
     // Description ou détails de la réunion
-    @Lob
+    @Column(columnDefinition = "TEXT")
     private String description;
 }
